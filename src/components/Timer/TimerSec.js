@@ -3,6 +3,7 @@ import skip from '../../images/skip.svg';
 import play from '../../images/play.svg';
 import more from '../../images/threeDots.svg';
 import pause from '../../images/pause.png';
+import Settings from "../Settings/Setting";
 
 function TimerSec(props) {
   const [startTimer, setStartTimer] = useState(false);
@@ -10,7 +11,13 @@ function TimerSec(props) {
   const [seconds, setSeconds] = useState(0);
   const [displayMessage, setDisplayMessage] = useState(false);
 
+  const [settingOn, setSettingsOn] = useState(false);
 
+  function showSettings(){
+    setSettingsOn(!settingOn);
+  }
+
+  //Timer
   useEffect(() => {
     if (startTimer === true) {
       let interval = setInterval(() => {
@@ -36,6 +43,7 @@ function TimerSec(props) {
     }
   }, [seconds, startTimer]);
 
+  //Button style, and display style
   const style = {
     buttonPlay: {
       color: "white",
@@ -72,6 +80,7 @@ function TimerSec(props) {
     },
   };
 
+  //Functions to make sure the timer displays two int when number is less than 10
   const timerMinutes = minutes < 10 ? `0${minutes}` : minutes;
   const timerSeconds = seconds < 10 ? `0${seconds}` : seconds;
 
@@ -85,9 +94,10 @@ function TimerSec(props) {
           {timerSeconds}
         </div>
         <div className="buttons">
-          <button onClick={() => setStartTimer(false)} style={style.button}>
+          <button onClick={showSettings} style={style.button}>
             <img src={more} alt="more" />
           </button>
+          {settingOn ? <Settings /> : ""}
           <button onClick={() => setStartTimer(!startTimer)} style={style.buttonPlay}>
             {startTimer ?  <img src={pause} alt="pause" /> : <img src={play} alt="play" />}
           </button>
