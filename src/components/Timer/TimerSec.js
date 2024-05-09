@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import skip from '../../images/skip.svg';
 import play from '../../images/play.svg';
 import more from '../../images/threeDots.svg';
+import pause from '../../images/pause.png';
 
 function TimerSec(props) {
   const [startTimer, setStartTimer] = useState(false);
@@ -87,8 +88,8 @@ function TimerSec(props) {
           <button onClick={() => setStartTimer(false)} style={style.button}>
             <img src={more} alt="more" />
           </button>
-          <button onClick={() => setStartTimer(true)} style={style.buttonPlay}>
-            <img src={play} alt="play" />
+          <button onClick={() => setStartTimer(!startTimer)} style={style.buttonPlay}>
+            {startTimer ?  <img src={pause} alt="pause" /> : <img src={play} alt="play" />}
           </button>
           <button onClick={() => setStartTimer(true)} style={style.button}>
             <img src={skip} alt="skip" />
