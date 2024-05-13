@@ -1,87 +1,61 @@
 import React, { useState, useEffect } from "react";
-import skip from '../../images/skip.svg';
-import play from '../../images/play.svg';
-import more from '../../images/threeDots.svg';
-import pause from '../../images/pause.png';
-import Settings from "../Settings/Setting";
+import skip from "../../images/skip.svg";
+import play from "../../images/play.svg";
+import more from "../../images/threeDots.svg";
+import pause from "../../images/pause.png";
+//import Settings from "../Settings/Setting";
 
-function TimerSec(props) {
+function TimerSec() {
   const [startTimer, setStartTimer] = useState(false);
-  const [minutes, setMinutes] = useState(25);
+  const [pomodoro, setPomodoro] = useState(25);
   const [seconds, setSeconds] = useState(0);
-  const [displayMessage, setDisplayMessage] = useState(false);
-
   const [settingOn, setSettingsOn] = useState(false);
+  const [rest, setRest] = useState(4);
+  const [breakOn, setBreakOn] = useState(true)
 
-  function showSettings(){
+  function showSettings() {
     setSettingsOn(!settingOn);
+  }
+
+  function changePomodoro(event){
+    setPomodoro(event.target.value);
+    setSeconds(0);
   }
 
   //Timer
   useEffect(() => {
+
+
     if (startTimer === true) {
       let interval = setInterval(() => {
         clearInterval(interval);
 
         if (seconds === 0) {
-          if (minutes !== 0) {
+          if (pomodoro !== 0) {
             setSeconds(59);
-            setMinutes(minutes - 1);
+            setPomodoro(pomodoro - 1);
           } else {
-            let minutes = displayMessage ? 24 : 4;
-            let seconds = 59;
 
-            setSeconds(seconds);
-            setMinutes(minutes);
-
-            setDisplayMessage(!displayMessage);
+            setBreakOn(!breakOn)
+            if(breakOn === true){
+              setPomodoro(rest - 1)
+              setSeconds(59);
+              console.log("break should start");
+            }else{
+              setPomodoro(pomodoro);
+              setSeconds(59)
+              console.log("Pomodoro should start")
+            }
           }
         } else {
           setSeconds(seconds - 1);
         }
-      }, 1000);
+      }, 50);
     }
-  }, [seconds, startTimer]);
-
-  //Button style, and display style
-  const style = {
-    buttonPlay: {
-      color: "white",
-      backgroundColor: "#FF4C4C",
-      width: "128px",
-      height: "96px",
-      borderRadius: "32px",
-      border: "none",
-      margin: "0 10px"
-    },
-    button: {
-      color: "white",
-      backgroundColor: "#270C0C",
-      width: "80px",
-      height: "80px",
-      borderRadius: "32px",
-      border: "none",
-    },
-    timerMinutes: {
-      fontSize: "300px",
-      padding: "0",
-      margin: "-30px",
-    },
-    timerSeconds: {
-      fontSize: "300px",
-      padding: "0",
-      marginTop: "-100px",
-    },
-    timerBox: {
-      display: "flex",
-      flexDirection: "column",
-      justifyContent: "center",
-      alignItems: "center",
-    },
-  };
+  }, [seconds, startTimer, breakOn]);
 
   //Functions to make sure the timer displays two int when number is less than 10
-  const timerMinutes = minutes < 10 ? `0${minutes}` : minutes;
+  const timerMinutes = pomodoro < 10 ? `0${pomodoro}` : pomodoro;
   const timerSeconds = seconds < 10 ? `0${seconds}` : seconds;
 
   return (
@@ -93,22 +67,105 @@ function TimerSec(props) {
         <div className="displaySeconds" style={style.timerSeconds}>
           {timerSeconds}
         </div>
+
         <div className="buttons">
           <button onClick={showSettings} style={style.button}>
             <img src={more} alt="more" />
           </button>
-          {settingOn ? <Settings /> : ""}
-          <button onClick={() => setStartTimer(!startTimer)} style={style.buttonPlay}>
-            {startTimer ?  <img src={pause} alt="pause" /> : <img src={play} alt="play" />}
+          {settingOn ? (
+            <div className="settings" style={style.settings}>
+              <p>Pomodoro</p>
+              <input
+                type="number"
+                min={15}
+                max={55}
+                onChange={changePomodoro}
+              ></input>
+              <p>Break</p>
+              <input
+                type="number"
+                min={4}
+                max={25}
+              ></input>
+            </div>
+          ) : (
+            ""
+          )}
+          <button
+            onClick={() => setStartTimer(!startTimer)}
+            style={style.buttonPlay}
+          >
+            {startTimer ? (
+              <img
+                src={pause}
+                alt="pause"
+                style={{ height: "22px", width: "26px" }}
+              />
+            ) : (
+              <img
+                src={play}
+                style={{ height: "22px", width: "26px" }}
+                alt="play"
+              />
+            )}
           </button>
           <button onClick={() => setStartTimer(true)} style={style.button}>
             <img src={skip} alt="skip" />
           </button>
-        
         </div>
       </div>
     </>
   );
 }
+
+//Button style, and display style
+const style = {
+  buttonPlay: {
+    color: "white",
+    backgroundColor: "#FF4C4C",
+    width: "128px",
+    height: "96px",
+    borderRadius: "32px",
+    border: "none",
+    margin: "0 10px",
+  },
+  button: {
+    color: "white",
+    backgroundColor: "#270C0C",
+    width: "80px",
+    height: "80px",
+    borderRadius: "32px",
+    border: "none",
+  },
+  timerMinutes: {
+    fontSize: "300px",
+    padding: "0",
+    margin: "-30px",
+  },
+  timerSeconds: {
+    fontSize: "300px",
+    padding: "0",
+    marginTop: "-100px",
+  },
+  timerBox: {
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  settings: {
+    backgroundColor: "red",
+    position: "absolute",
+    height: "160px",
+    width: "250px",
+    top: "63%",
+    borderRadius: "30px",
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "center",
+    alignItems: "center",
+    color: "white",
+  },
+};
 
 export default TimerSec;
