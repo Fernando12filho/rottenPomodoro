@@ -3,6 +3,7 @@ import skip from "../../images/skip.svg";
 import play from "../../images/play.svg";
 import more from "../../images/threeDots.svg";
 import pause from "../../images/pause.png";
+import "../../App.css";
 //import Settings from "../Settings/Setting";
 
 function TimerSec() {
@@ -10,7 +11,7 @@ function TimerSec() {
   const [pomodoro, setPomodoro] = useState(25);
   const [seconds, setSeconds] = useState(0);
   const [settingOn, setSettingsOn] = useState(false);
-  const [rest, setRest] = useState(4);
+  //const [rest, setRest] = useState(4);
   const [breakOn, setBreakOn] = useState(true)
 
   function showSettings() {
@@ -25,7 +26,6 @@ function TimerSec() {
   //Timer
   useEffect(() => {
 
-
     if (startTimer === true) {
       let interval = setInterval(() => {
         clearInterval(interval);
@@ -34,23 +34,18 @@ function TimerSec() {
           if (pomodoro !== 0) {
             setSeconds(59);
             setPomodoro(pomodoro - 1);
+            
           } else {
+              console.log(breakOn)
+              {breakOn ?  setPomodoro(4): setPomodoro(24)}
 
-            setBreakOn(!breakOn)
-            if(breakOn === true){
-              setPomodoro(rest - 1)
-              setSeconds(59);
-              console.log("break should start");
-            }else{
-              setPomodoro(pomodoro);
+              setBreakOn(!breakOn);
               setSeconds(59)
-              console.log("Pomodoro should start")
-            }
           }
         } else {
           setSeconds(seconds - 1);
         }
-      }, 50);
+      }, 10);
     }
   }, [seconds, startTimer, breakOn]);
 
@@ -69,7 +64,7 @@ function TimerSec() {
         </div>
 
         <div className="buttons">
-          <button onClick={showSettings} style={style.button}>
+          <button onClick={showSettings} style={style.button} disabled={true}>
             <img src={more} alt="more" />
           </button>
           {settingOn ? (
@@ -94,6 +89,7 @@ function TimerSec() {
           <button
             onClick={() => setStartTimer(!startTimer)}
             style={style.buttonPlay}
+            id="buttonPlay"
           >
             {startTimer ? (
               <img
@@ -109,7 +105,7 @@ function TimerSec() {
               />
             )}
           </button>
-          <button onClick={() => setStartTimer(true)} style={style.button}>
+          <button onClick={() => setStartTimer(true)} style={style.button} disabled={true}>
             <img src={skip} alt="skip" />
           </button>
         </div>
@@ -127,11 +123,12 @@ const style = {
     height: "96px",
     borderRadius: "32px",
     border: "none",
-    margin: "0 10px",
+    margin: "0 10px", 
+    cursor: "pointer"
   },
   button: {
     color: "white",
-    backgroundColor: "#270C0C",
+    backgroundColor: "Gray",
     width: "80px",
     height: "80px",
     borderRadius: "32px",
