@@ -45,7 +45,7 @@ function TimerSec() {
         } else {
           setSeconds(seconds - 1);
         }
-      }, 10);
+      }, 1000);
     }
   }, [seconds, startTimer, breakOn]);
 
