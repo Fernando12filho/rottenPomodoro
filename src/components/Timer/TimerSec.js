@@ -25,29 +25,27 @@ function TimerSec() {
 
   //Timer
   useEffect(() => {
-
     if (startTimer === true) {
       let interval = setInterval(() => {
         clearInterval(interval);
 
         if (seconds === 0) {
           if (pomodoro !== 0) {
-            setSeconds(59);
             setPomodoro(pomodoro - 1);
-            
+            setSeconds(59); 
           } else {
               console.log(breakOn)
+              // eslint-disable-next-line no-lone-blocks
               {breakOn ?  setPomodoro(4): setPomodoro(24)}
-
               setBreakOn(!breakOn);
-              setSeconds(59)
+              setSeconds(0)
           }
         } else {
           setSeconds(seconds - 1);
         }
       }, 1000);
     }
-  }, [seconds, startTimer, breakOn]);
+  }, [seconds, startTimer, breakOn, pomodoro]);
 
   //Functions to make sure the timer displays two int when number is less than 10
   const timerMinutes = pomodoro < 10 ? `0${pomodoro}` : pomodoro;
